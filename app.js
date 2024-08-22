@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken")
 const admin = require("firebase-admin")
 require("dotenv").config()
 
-const serviceAccount = require("../serviceAccountKey.json")
+const serviceAccount = process.env.SERVICE_ACCOUNT_KEY
 
 const DATABASE_URL = process.env.DATABASE_URL
 console.log(DATABASE_URL)
