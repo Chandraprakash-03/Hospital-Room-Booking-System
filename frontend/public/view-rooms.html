@@ -76,7 +76,7 @@
         <script>
             async function fetchBookedRooms() {
                 try {
-                    const response = await fetch("https://auroitech.onrender.com/api/booked-rooms")
+                    const response = await fetch("https://hospital-room-booking-system.onrender.com/api/booked-rooms")
                     const rooms = await response.json()
                     const tableBody = document.getElementById("roomTableBody")
 
