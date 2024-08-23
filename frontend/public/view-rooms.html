@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>View Booked Rooms</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f4f4f4;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+            }
+            .container {
+                background-color: #fff;
+                padding: 20px;
+                border-radius: 5px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                width: 100%;
+                max-width: 800px;
+            }
+            .container h2 {
+                margin-bottom: 20px;
+                color: #333;
+            }
+            .room-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 20px;
+            }
+            .room-table th,
+            .room-table td {
+                border: 1px solid #ddd;
+                padding: 10px;
+                text-align: left;
+            }
+            .room-table th {
+                background-color: #f4f4f4;
+            }
+            .back-link {
+                text-align: center;
+            }
+            .back-link a {
+                color: #007bff;
+                text-decoration: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h2>Booked Rooms</h2>
+            <table class="room-table">
+                <thead>
+                    <tr>
+                        <th>Room Number</th>
+                        <th>Patient Name</th>
+                        <th>Phone</th>
+                        <th>Room Type</th>
+                        <th>Admission Date</th>
+                        <th>Number of Days</th>
+                        <th>Total Cost</th>
+                    </tr>
+                </thead>
+                <tbody id="roomTableBody">
+                    <!-- Booked rooms will be dynamically inserted here -->
+                </tbody>
+            </table>
+            <div class="back-link">
+                <p><a href="dashboard.html">Back to Dashboard</a></p>
+            </div>
+        </div>
+
+        <script>
+            async function fetchBookedRooms() {
+                try {
+                    const response = await fetch("https://auroitech.onrender.com/api/booked-rooms")
+                    const rooms = await response.json()
+                    const tableBody = document.getElementById("roomTableBody")
+
+                    if (Array.isArray(rooms) && rooms.length > 0) {
+                        rooms.forEach((room) => {
+                            const row = document.createElement("tr")
+                            row.innerHTML = `
+                            <td>${room.roomNumber}</td>
+                            <td>${room.patientName}</td>
+                            <td>${room.phone}</td>
+                            <td>${room.roomType}</td>
+                            <td>${room.admissionDate}</td>
+                            <td>${room.numberOfDays}</td>
+                            <td>${room.totalCost}</td>
+                        `
+                            tableBody.appendChild(row)
+                        })
+                    } else {
+                        const row = document.createElement("tr")
+                        row.innerHTML = `<td colspan="7">No booked rooms available</td>`
+                        tableBody.appendChild(row)
+                    }
+                } catch (error) {
+                    console.error("Failed to fetch booked rooms:", error)
+                    const tableBody = document.getElementById("roomTableBody")
+                    const row = document.createElement("tr")
+                    row.innerHTML = `<td colspan="7">Failed to load data</td>`
+                    tableBody.appendChild(row)
+                }
+            }
+
+            document.addEventListener("DOMContentLoaded", fetchBookedRooms)
+        </script>
+    </body>
+</html>

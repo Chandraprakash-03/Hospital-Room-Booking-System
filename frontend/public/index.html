@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Dashboard</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f4f4f4;
+                margin: 0;
+                padding: 0;
+            }
+            .dashboard-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 20px;
+            }
+            .menu {
+                background-color: #fff;
+                padding: 20px;
+                border-radius: 5px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                margin-bottom: 20px;
+                width: 100%;
+                max-width: 600px;
+            }
+            .menu h2 {
+                margin-bottom: 10px;
+                color: #333;
+            }
+            .menu button {
+                display: block;
+                width: 100%;
+                padding: 10px;
+                margin: 5px 0;
+                background-color: #007bff;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 16px;
+            }
+            .menu button:hover {
+                background-color: #0056b3;
+            }
+            .menu p {
+                text-align: center;
+                margin-top: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="dashboard-container">
+            <div class="menu">
+                <h2>Book a Room</h2>
+                <button onclick="location.href='book-room.html'">Book Room</button>
+            </div>
+            <div class="menu">
+                <h2>View Booked Rooms</h2>
+                <button onclick="location.href='view-booked-rooms.html'">View Booked Rooms</button>
+            </div>
+            <div class="menu">
+                <h2>Cancel a Room</h2>
+                <button onclick="location.href='cancel-room.html'">Cancel Room</button>
+            </div>
+        </div>
+    </body>
+</html>

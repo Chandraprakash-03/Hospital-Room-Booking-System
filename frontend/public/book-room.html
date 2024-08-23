@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Book Room</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f4f4f4;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+            }
+            .container {
+                background-color: #fff;
+                padding: 20px;
+                border-radius: 5px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                width: 100%;
+                max-width: 500px;
+            }
+            .container h2 {
+                margin-bottom: 20px;
+                color: #333;
+            }
+            .container input[type="text"],
+            .container input[type="date"],
+            .container input[type="number"],
+            .container select {
+                width: 100%;
+                padding: 10px;
+                margin-bottom: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
+            .container button {
+                width: 100%;
+                padding: 10px;
+                background-color: #007bff;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 16px;
+            }
+            .container button:hover {
+                background-color: #0056b3;
+            }
+            .hidden {
+                display: none;
+            }
+            .back-link {
+                text-align: center;
+                margin-top: 10px;
+            }
+            .back-link a {
+                color: #007bff;
+                text-decoration: none;
+            }
+            .bill-details {
+                margin-top: 20px;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                background-color: #e9ecef;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div id="verificationSection">
+                <h2>Verify UIN</h2>
+                <form id="verifyUINForm">
+                    <input type="text" id="uin" placeholder="Enter your UIN" required />
+                    <button type="submit">Verify UIN</button>
+                </form>
+                <div class="back-link">
+                    <p><a href="dashboard.html">Back to Dashboard</a></p>
+                </div>
+            </div>
+
+            <div id="bookingSection" class="hidden">
+                <h2>Book a Room</h2>
+                <form id="bookingForm">
+                    <input type="text" id="patientName" placeholder="Patient Name" required />
+                    <input type="text" id="phone" placeholder="Phone Number" required />
+                    <select id="roomType" required>
+                        <option value="">Select Room Type</option>
+                        <option value="Special">Special</option>
+                        <option value="Class A">Class A</option>
+                        <option value="Class B">Class B</option>
+                        <option value="Class C">Class C</option>
+                        <option value="Standard">Standard</option>
+                    </select>
+                    <input type="date" id="admissionDate" required />
+                    <input
+                        type="number"
+                        id="numberOfDays"
+                        placeholder="Number of Days"
+                        required
+                        min="1"
+                    />
+                    <button type="submit">Book Room</button>
+                </form>
+                <div class="back-link">
+                    <p><a href="dashboard.html">Back to Dashboard</a></p>
+                </div>
+                <div id="billDetails" class="hidden bill-details">
+                    <h3>Bill Details</h3>
+                    <p id="billMessage"></p>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document
+                .getElementById("verifyUINForm")
+                .addEventListener("submit", async function (event) {
+                    event.preventDefault()
+                    const uin = document.getElementById("uin").value
+
+                    try {
+                        const response = await fetch(
+                            "https://auroitech.onrender.com/api/verify-uin",
+                            {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify({ uin }),
+                            }
+                        )
+
+                        const data = await response.json()
+                        if (response.ok && data.success) {
+                            document.getElementById("verificationSection").classList.add("hidden")
+                            document.getElementById("bookingSection").classList.remove("hidden")
+                        } else {
+                            alert("UIN verification failed: " + data.message)
+                        }
+                    } catch (error) {
+                        alert("An error occurred: " + error.message)
+                    }
+                })
+
+            document
+                .getElementById("bookingForm")
+                .addEventListener("submit", async function (event) {
+                    event.preventDefault()
+                    const patientName = document.getElementById("patientName").value
+                    const phone = document.getElementById("phone").value
+                    const roomType = document.getElementById("roomType").value
+                    const admissionDate = document.getElementById("admissionDate").value
+                    const numberOfDays = document.getElementById("numberOfDays").value
+
+                    try {
+                        const response = await fetch(
+                            "https://auroitech.onrender.com/api/book-room",
+                            {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify({
+                                    patientName,
+                                    phone,
+                                    roomType,
+                                    admissionDate,
+                                    numberOfDays,
+                                }),
+                            }
+                        )
+
+                        const data = await response.json()
+                        if (response.ok) {
+                            document.getElementById("billDetails").classList.remove("hidden")
+                            document.getElementById(
+                                "billMessage"
+                            ).textContent = `Room Number: ${data.bookedRoom.roomNumber}\nTotal Cost: $${data.bookedRoom.totalCost}`
+                            document.getElementById("bookingForm").reset()
+                        } else {
+                            alert("Booking failed: " + data.message)
+                        }
+                    } catch (error) {
+                        alert("An error occurred: " + error.message)
+                    }
+                })
+        </script>
+    </body>
+</html>
