@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken")
 const admin = require("firebase-admin")
 require("dotenv").config()
 
+//add the firebase service account to .env
 const serviceAccount = JSON.parse(process.env.SERVICE_ACCOUNT_KEY)
 
 const DATABASE_URL = process.env.DATABASE_URL
